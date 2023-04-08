@@ -26,3 +26,13 @@ jobs:
       run: dotnet build --no-restore ./src/WeatherApi/WeatherApi.csproj
     - name: Test
       run: dotnet test --no-build --verbosity normal ./test/WeatherApi.Test/WeatherApi.Test.csproj
+    - name: Publish
+      run: dotnet publish --no-build --configuration Release --output ./publish ./src/WeatherApi/WeatherApi.csproj
+    - name: Publish to Lightsail
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.LIGHTSAIL_HOST }}
+        username: ${{ secrets.LIGHTSAIL_USERNAME }}
+        key: ${{ secrets.LIGHTSAIL_KEY }}
+        source: "./publish"
+        target: "/home/ubuntu/weather-api"
