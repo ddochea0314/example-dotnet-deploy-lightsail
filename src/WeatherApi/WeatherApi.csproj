@@ -9,5 +9,9 @@
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
+  <!-- include weather-api.service file -->
+  <ItemGroup>
+    <None Include="weather-api.service" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>
