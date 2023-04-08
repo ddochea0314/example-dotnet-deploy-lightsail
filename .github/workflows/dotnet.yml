@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, test]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v3 # 없으면 publish가 안됨. project 파일 not found 나옴 
     - name: Publish
       run: dotnet publish --configuration Release --sc --output ./publish ./src/WeatherApi/WeatherApi.csproj
     - name: Deploy to Lightsail
