@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore --project ./src/MyProject/MyProject.csproj
+      run: dotnet restore ./src/WeatherApi/WeatherApi.csproj
     - name: Build
-      run: dotnet build --no-restore --project ./src/MyProject/MyProject.csproj
+      run: dotnet build --no-restore ./src/WeatherApi/WeatherApi.csproj
     - name: Test
-      run: dotnet test --no-build --verbosity normal --project ./test/MyProject/MyProject.Test.csproj
+      run: dotnet test --no-build --verbosity normal ./test/WeatherApi.Test/WeatherApi.Test.csproj
