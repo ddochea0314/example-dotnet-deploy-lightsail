@@ -29,4 +29,27 @@ public class WeatherForecastController : ControllerBase
         })
         .ToArray();
     }
+
+    [HttpGet("{id}", Name = "GetWeatherForecastById")]
+    public WeatherForecast? Get(int id)
+    {
+        // if id is 0, return null
+        if (id == 0)
+        {
+            return null;
+        }
+
+        // if id is -1, return bed request
+        if (id == -1)
+        {
+            throw new ArgumentException("id cannot be -1");
+        }
+        
+        return new WeatherForecast
+        {
+            Date = DateTime.Now.AddDays(id),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        };
+    }
 }
