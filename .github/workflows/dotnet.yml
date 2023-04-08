@@ -24,8 +24,17 @@ jobs:
       run: dotnet restore ./src/WeatherApi/WeatherApi.csproj
     - name: Build
       run: dotnet build --no-restore ./src/WeatherApi/WeatherApi.csproj
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
     - name: Test
       run: dotnet test --no-build --verbosity normal ./test/WeatherApi.Test/WeatherApi.Test.csproj
+  publish:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
     - name: Publish
       run: dotnet publish --configuration Release --output ./publish ./src/WeatherApi/WeatherApi.csproj
     - name: Publish to Lightsail
