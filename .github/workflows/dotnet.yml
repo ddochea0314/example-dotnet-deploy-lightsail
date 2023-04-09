@@ -47,6 +47,16 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y dotnet-sdk-6.0
           fi
+    - name: Stop service if Exists
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.LIGHTSAIL_HOST }}
+        username: ${{ secrets.LIGHTSAIL_USERNAME }}
+        key: ${{ secrets.LIGHTSAIL_KEY }}
+        script: |
+          if sudo systemctl is-active --quiet weather-api.service; then
+            sudo systemctl stop weather-api.service
+          fi
     - name: Publish
       run: dotnet publish --configuration Release --output ./publish ./src/WeatherApi/WeatherApi.csproj
     - name: Deploy to Lightsail
@@ -57,23 +67,16 @@ jobs:
         key: ${{ secrets.LIGHTSAIL_KEY }}
         source: "./publish"
         target: "/home/ubuntu/weather-api"
-    - name: Check service and install if not exists
+    - name: Service Install and Start
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.LIGHTSAIL_HOST }}
         username: ${{ secrets.LIGHTSAIL_USERNAME }}
         key: ${{ secrets.LIGHTSAIL_KEY }}
         script: |
-          if ! systemctl is-active --quiet weather-api.service; then
-            sudo cp /home/ubuntu/weather-api/publish/weather-api.service /etc/systemd/system/weather-api.service
-            sudo systemctl enable weather-api.service
-            sudo systemctl start weather-api.service
-          fi
-    - name: Restart service
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.LIGHTSAIL_HOST }}
-        username: ${{ secrets.LIGHTSAIL_USERNAME }}
-        key: ${{ secrets.LIGHTSAIL_KEY }}
-        script: |
-          sudo systemctl restart weather-api.service
+          sudo systemctl stop weather-api.service
+          sudo systemctl disable weather-api.service
+          sudo rm /etc/systemd/system/weather-api.service
+          sudo cp /home/ubuntu/weather-api/publish/weather-api.service /etc/systemd/system/weather-api.service
+          sudo systemctl enable weather-api.service
+          sudo systemctl start weather-api.service
