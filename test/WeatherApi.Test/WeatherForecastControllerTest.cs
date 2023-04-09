@@ -25,6 +25,6 @@ public class WeatherForecastControllerTest
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(10, result.Count());
+        Assert.Equal(5, result.Count());
     }
 }

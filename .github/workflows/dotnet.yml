@@ -67,16 +67,22 @@ jobs:
         key: ${{ secrets.LIGHTSAIL_KEY }}
         source: "./publish"
         target: "/home/ubuntu/weather-api"
-    - name: Service Install and Start
+    - name: Service Install if not Exists
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.LIGHTSAIL_HOST }}
         username: ${{ secrets.LIGHTSAIL_USERNAME }}
         key: ${{ secrets.LIGHTSAIL_KEY }}
         script: |
-          sudo systemctl stop weather-api.service
-          sudo systemctl disable weather-api.service
-          sudo rm /etc/systemd/system/weather-api.service
-          sudo cp /home/ubuntu/weather-api/publish/weather-api.service /etc/systemd/system/weather-api.service
-          sudo systemctl enable weather-api.service
+          if ! sudo systemctl is-active --quiet weather-api.service; then
+            sudo cp /home/ubuntu/weather-api/publish/weather-api.service /etc/systemd/system/weather-api.service
+            sudo systemctl enable weather-api.service
+          fi
+    - name: Service Start
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.LIGHTSAIL_HOST }}
+        username: ${{ secrets.LIGHTSAIL_USERNAME }}
+        key: ${{ secrets.LIGHTSAIL_KEY }}
+        script: |
           sudo systemctl start weather-api.service
