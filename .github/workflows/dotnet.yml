@@ -34,8 +34,21 @@ jobs:
     needs: [build, test]
     steps:
     - uses: actions/checkout@v3 # 없으면 publish가 안됨. project 파일 not found 나옴 
+    - name: Install dotnet if not exists
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.LIGHTSAIL_HOST }}
+        username: ${{ secrets.LIGHTSAIL_USERNAME }}
+        key: ${{ secrets.LIGHTSAIL_KEY }}
+        script: |
+          if ! dotnet --version; then
+            sudo apt-get update
+            sudo apt-get install -y apt-transport-https
+            sudo apt-get update
+            sudo apt-get install -y dotnet-sdk-6.0
+          fi
     - name: Publish
-      run: dotnet publish --configuration Release --sc --output ./publish ./src/WeatherApi/WeatherApi.csproj
+      run: dotnet publish --configuration Release --output ./publish ./src/WeatherApi/WeatherApi.csproj
     - name: Deploy to Lightsail
       uses: appleboy/scp-action@master
       with:
