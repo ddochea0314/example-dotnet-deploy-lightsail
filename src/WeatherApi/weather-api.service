@@ -3,7 +3,7 @@ Description=Weather API .NET Web API Application running on Ubuntu
 
 [Service]
 WorkingDirectory=/home/ubuntu/weather-api/
-ExecStart=/usr/bin/dotnet /home/ubuntu/weather-api/publish/WeatherApi.dll
+ExecStart=/usr/bin/dotnet /home/ubuntu/weather-api/publish/WeatherApi.dll environment=Production
 Restart=always 
 RestartSec=10 
 SyslogIdentifier=dotnet-weatherAPI 
