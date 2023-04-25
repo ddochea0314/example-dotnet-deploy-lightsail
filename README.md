@@ -1,5 +1,6 @@
-# example-dotnet-deploy-lightsail
-github action 을 통한 aws lightsail 배포 예제
+# example-dotnet-deploy-ubuntu
+github action 을 통한 ubuntu 서버 배포 예제
+> aws lightsail 기준으로 만든 예제입니다.
 
 # 서비스 동작 여부 확인
 ```
