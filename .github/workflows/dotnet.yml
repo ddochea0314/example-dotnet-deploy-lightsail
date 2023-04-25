@@ -5,10 +5,11 @@ name: .NET
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+    # branches: [ "main" ]
+    tags:
+      - v*
+  # pull_request:
+    # branches: [ "main" ]
 jobs:
   build:
     runs-on: ubuntu-latest
